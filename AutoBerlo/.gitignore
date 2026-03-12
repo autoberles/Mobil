@@ -1,0 +1,52 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+bin/
+obj/
+
+# .NET MAUI
+*.apk
+*.apks
+*.aab
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Database / cache
+*.db
+*.cache
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# NuGet
+*.nupkg
+packages/
+
+# Test results
+TestResults/
+
+# Copilot / VS indexes
+CopilotIndices/
+
+# MAUI build folders
+Platforms/Android/bin/
+Platforms/Android/obj/
+Platforms/iOS/bin/
+Platforms/iOS/obj/

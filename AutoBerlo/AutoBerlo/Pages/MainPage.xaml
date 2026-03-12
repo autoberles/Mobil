@@ -1,0 +1,40 @@
+﻿<ContentPage
+    x:Class="AutoBerlo.Pages.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Bejelentkezés">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <Label
+                Text="LOGO"
+                FontSize="32"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+
+            <Entry
+                Placeholder="Email"
+                Text="{Binding Email}" />
+
+            <Entry
+                Placeholder="Jelszó"
+                IsPassword="True"
+                Text="{Binding Password}" />
+
+            <Button
+                Text="Bejelentkezés"
+                Command="{Binding LoginCommand}"
+                BackgroundColor="#1E88E5"
+                TextColor="White"/>
+
+            <Button
+                Text="Még nincs profilod? Regisztráció"
+                Command="{Binding GoToRegisterCommand}"
+                BackgroundColor="Transparent"
+                TextColor="Gray"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

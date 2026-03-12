@@ -1,0 +1,47 @@
+<ContentPage
+    x:Class="AutoBerlo.Pages.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Regisztráció">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="15">
+
+            <Label
+                Text="LOGO"
+                FontSize="32"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"/>
+
+            <Entry
+                Placeholder="Vezetéknév"
+                Text="{Binding LastName}" />
+
+            <Entry
+                Placeholder="Keresztnév"
+                Text="{Binding FirstName}" />
+
+            <Entry
+                Placeholder="Telefonszám"
+                Keyboard="Telephone"
+                Text="{Binding Phone}" />
+
+            <Entry
+                Placeholder="Email"
+                Text="{Binding Email}" />
+
+            <Entry
+                Placeholder="Jelszó"
+                IsPassword="True"
+                Text="{Binding Password}" />
+
+            <Button
+                Text="Regisztráció"
+                Command="{Binding RegisterCommand}"
+                BackgroundColor="#43A047"
+                TextColor="White"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
