@@ -1,17 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoBerlo.Pages;
+using AutoBerlo.Services;
 
-namespace AutoBerlo
+namespace AutoBerlo;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public App(IServiceProvider services, AuthService authService)
     {
-        public App()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new AppShell());
-        }
+        if (authService.IsLoggedIn)
+            MainPage = new AppShell();
+        else
+            MainPage = new NavigationPage(services.GetRequiredService<LoginPage>());
     }
 }

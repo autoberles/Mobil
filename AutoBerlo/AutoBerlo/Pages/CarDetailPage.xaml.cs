@@ -2,9 +2,9 @@ using AutoBerlo.ViewModels;
 
 namespace AutoBerlo.Pages;
 
-public partial class RegisterPage : ContentPage
+public partial class CarDetailPage : ContentPage
 {
-    public RegisterPage(RegisterViewModel vm)
+    public CarDetailPage(CarDetailViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;

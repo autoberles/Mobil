@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             x:Class="AutoBerlo.Pages.CarDetailPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <!-- Grid: sor 0 = scrollozható tartalom, sor 1 = fix bérlés gomb alul -->
+    <Grid RowDefinitions="*,Auto" BackgroundColor="{StaticResource DarkGray}">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Autó kép + vissza gomb -->
+                <Grid HeightRequest="260">
+                    <Image Source="{Binding Car.ImgUrl}"
+                           Aspect="AspectFill"
+                           HeightRequest="260"/>
+                    <BoxView BackgroundColor="#CC000000"
+                             VerticalOptions="End"
+                             HeightRequest="100"/>
+                    <Button Text="←"
+                            Style="{StaticResource TextButton}"
+                            Command="{Binding GoBackCommand}"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Start"
+                            Margin="16,48,0,0"
+                            FontSize="24"
+                            BackgroundColor="#88000000"
+                            CornerRadius="20"
+                            WidthRequest="44"
+                            HeightRequest="44"/>
+                    <VerticalStackLayout VerticalOptions="End" Padding="20,0,20,16">
+                        <Label Text="{Binding Car.DisplayName}"
+                               FontFamily="RajdhaniBold"
+                               FontSize="28"
+                               TextColor="White"/>
+                        <Label Text="{Binding Car.CarCategory.Name}"
+                               FontFamily="RajdhaniRegular"
+                               FontSize="14"
+                               TextColor="{StaticResource PrimaryYellow}"/>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <VerticalStackLayout Padding="20,20,20,20" Spacing="0">
+
+                    <!-- Ár + elérhetőség -->
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding Car.PriceDisplay}"
+                                   FontFamily="RajdhaniBold"
+                                   FontSize="28"
+                                   TextColor="{StaticResource PrimaryYellow}"/>
+                            <Label Text="naponta"
+                                   FontFamily="RajdhaniRegular"
+                                   FontSize="13"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                        </VerticalStackLayout>
+                        <Border Grid.Column="1"
+                                VerticalOptions="Center"
+                                Padding="14,6"
+                                StrokeShape="RoundRectangle 20"
+                                BackgroundColor="{Binding Car.Availability,
+                                                  Converter={StaticResource AvailabilityColor}}">
+                            <Label Text="{Binding Car.AvailabilityText}"
+                                   FontFamily="RajdhaniBold"
+                                   FontSize="13"
+                                   TextColor="White"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Műszaki adatok -->
+                    <Label Text="MŰSZAKI ADATOK" Style="{StaticResource SectionTitle}"/>
+                    <Border BackgroundColor="{StaticResource CardGray}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{StaticResource BorderGray}"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto,Auto,Auto"
+                              RowSpacing="12">
+
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                <Label Text="ÜZEMANYAG" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.FuelType.Name}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                                <Label Text="VÁLTÓ" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.TransmissionType.Name}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                                <Label Text="TELJESÍTMÉNY" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Car.PerformanceHp}"/>
+                                            <Span Text=" LE / "/>
+                                            <Span Text="{Binding Car.PerformanceKw}"/>
+                                            <Span Text=" kW"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                <Label Text="HAJTÁS" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.WheelDriveType.Name}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="2" Grid.Column="0">
+                                <Label Text="FÉRŐHELYEK" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.NumberOfSeats, StringFormat='{0} fő'}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                                <Label Text="AJTÓK" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.NumberOfDoors, StringFormat='{0} ajtó'}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="3" Grid.Column="0">
+                                <Label Text="FUTOTT KM" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.Mileage, StringFormat='{0:N0} km'}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="3" Grid.Column="1">
+                                <Label Text="SZÍN" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.Color}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="15"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <!-- Extra felszereltség -->
+                    <Label Text="EXTRA FELSZERELTSÉG" Style="{StaticResource SectionTitle}"/>
+                    <Border BackgroundColor="{StaticResource CardGray}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{StaticResource BorderGray}"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto,Auto"
+                              RowSpacing="10">
+
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   FontFamily="RajdhaniRegular" FontSize="14"
+                                   TextColor="{Binding Car.AdditionalEquipment.Navigation,
+                                               Converter={StaticResource FeatureColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Car.AdditionalEquipment.Navigation,
+                                                     Converter={StaticResource Checkmark}}"/>
+                                        <Span Text="  Navigáció"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Label Grid.Row="0" Grid.Column="1"
+                                   FontFamily="RajdhaniRegular" FontSize="14"
+                                   TextColor="{Binding Car.AdditionalEquipment.ParkingSensors,
+                                               Converter={StaticResource FeatureColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Car.AdditionalEquipment.ParkingSensors,
+                                                     Converter={StaticResource Checkmark}}"/>
+                                        <Span Text="  Parkolóradar"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Label Grid.Row="1" Grid.Column="0"
+                                   FontFamily="RajdhaniRegular" FontSize="14"
+                                   TextColor="{Binding Car.AdditionalEquipment.HeatedSeats,
+                                               Converter={StaticResource FeatureColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Car.AdditionalEquipment.HeatedSeats,
+                                                     Converter={StaticResource Checkmark}}"/>
+                                        <Span Text="  Fűthető ülés"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Label Grid.Row="1" Grid.Column="1"
+                                   FontFamily="RajdhaniRegular" FontSize="14"
+                                   TextColor="{Binding Car.AdditionalEquipment.LeatherSeats,
+                                               Converter={StaticResource FeatureColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Car.AdditionalEquipment.LeatherSeats,
+                                                     Converter={StaticResource Checkmark}}"/>
+                                        <Span Text="  Bőrülés"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Label Grid.Row="2" Grid.Column="0"
+                                   FontFamily="RajdhaniRegular" FontSize="14"
+                                   TextColor="{Binding Car.AdditionalEquipment.Tempomat,
+                                               Converter={StaticResource FeatureColor}}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Car.AdditionalEquipment.Tempomat,
+                                                     Converter={StaticResource Checkmark}}"/>
+                                        <Span Text="  Tempomat"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <VerticalStackLayout Grid.Row="2" Grid.Column="1">
+                                <Label Text="KLÍMA" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <Label Text="{Binding Car.AdditionalEquipment.AirConditioning.Name}"
+                                       FontFamily="RajdhaniSemiBold" FontSize="14"
+                                       TextColor="{StaticResource TextPrimary}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <!-- Telephely -->
+                    <Label Text="ÁTVÉTEL HELYE" Style="{StaticResource SectionTitle}"/>
+                    <Border BackgroundColor="{StaticResource CardGray}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{StaticResource BorderGray}"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,12">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding Car.Branch.City}"
+                                   FontFamily="RajdhaniBold" FontSize="16"
+                                   TextColor="{StaticResource TextPrimary}"/>
+                            <Label Text="{Binding Car.Branch.Address}"
+                                   FontFamily="RajdhaniRegular" FontSize="14"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                            <Label Text="{Binding Car.Branch.PhoneNumber}"
+                                   FontFamily="RajdhaniRegular" FontSize="14"
+                                   TextColor="{StaticResource PrimaryYellow}"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Dátumválasztó -->
+                    <Label Text="BÉRLÉS IDŐSZAKA" Style="{StaticResource SectionTitle}"/>
+                    <Border BackgroundColor="{StaticResource CardGray}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{StaticResource BorderGray}"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="KEZDETE" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <DatePicker Date="{Binding StartDate}"
+                                            Format="yyyy.MM.dd"
+                                            TextColor="{StaticResource TextPrimary}"
+                                            FontFamily="RajdhaniSemiBold"
+                                            FontSize="15"
+                                            BackgroundColor="Transparent"/>
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1" Text="→"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="18"
+                                   VerticalOptions="End"
+                                   Margin="0,0,0,4"/>
+                            <VerticalStackLayout Grid.Column="2">
+                                <Label Text="VÉGE" FontFamily="RajdhaniBold" FontSize="10"
+                                       TextColor="{StaticResource TextSecondary}" CharacterSpacing="1"/>
+                                <DatePicker Date="{Binding EndDate}"
+                                            Format="yyyy.MM.dd"
+                                            TextColor="{StaticResource TextPrimary}"
+                                            FontFamily="RajdhaniSemiBold"
+                                            FontSize="15"
+                                            BackgroundColor="Transparent"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <!-- Összesítő -->
+                    <Border BackgroundColor="{StaticResource MediumGray}"
+                            StrokeShape="RoundRectangle 12"
+                            Stroke="{StaticResource PrimaryYellow}"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,4,0,8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="{Binding TotalDays, StringFormat='{0} nap bérlés'}"
+                                       FontFamily="RajdhaniRegular" FontSize="14"
+                                       TextColor="{StaticResource TextSecondary}"/>
+                                <Label Text="Végösszeg"
+                                       FontFamily="RajdhaniRegular" FontSize="13"
+                                       TextColor="{StaticResource TextHint}"/>
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1"
+                                   Text="{Binding TotalPrice, StringFormat='{0:N0} Ft'}"
+                                   FontFamily="RajdhaniBold" FontSize="26"
+                                   TextColor="{StaticResource PrimaryYellow}"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Fix bérlés gomb alul — Grid Row="1" -->
+        <Border Grid.Row="1"
+                BackgroundColor="{StaticResource MediumGray}"
+                StrokeThickness="0"
+                Padding="20,12,20,28">
+            <Button Text="BÉRLÉS MEGKEZDÉSE →"
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding ProceedToPaymentCommand}"
+                    IsEnabled="{Binding Car.Availability}"/>
+        </Border>
+
+    </Grid>
+</ContentPage>

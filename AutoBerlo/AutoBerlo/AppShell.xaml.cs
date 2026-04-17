@@ -8,6 +8,11 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        Routing.RegisterRoute("register", typeof(RegisterPage));
+        // Navigációs útvonalak regisztrálása
+        Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+        Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
+        Routing.RegisterRoute(nameof(ForgotPasswordPage), typeof(ForgotPasswordPage));
+        Routing.RegisterRoute(nameof(CarDetailPage), typeof(CarDetailPage));
+        Routing.RegisterRoute(nameof(PaymentPage), typeof(PaymentPage));
     }
 }

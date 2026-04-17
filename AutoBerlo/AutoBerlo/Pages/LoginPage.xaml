@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AutoBerlo.Pages.LoginPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <ScrollView BackgroundColor="{StaticResource DarkGray}">
+        <VerticalStackLayout Padding="32,60,32,32" Spacing="0">
+
+            <Image Source="logo.png"
+                   HeightRequest="60"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,48"/>
+
+            <Label Text="Üdvözlünk!"
+                   Style="{StaticResource PageTitle}"
+                   HorizontalOptions="Start"/>
+            <Label Text="Jelentkezz be a folytatáshoz"
+                   Style="{StaticResource SubTitle}"
+                   Margin="0,4,0,36"/>
+
+            <Label Text="EMAIL CÍM" Style="{StaticResource SectionTitle}"/>
+            <Border StrokeShape="RoundRectangle 10"
+                    Stroke="{StaticResource BorderGray}"
+                    BackgroundColor="{StaticResource MediumGray}"
+                    Padding="16,0" HeightRequest="52" Margin="0,0,0,12">
+                <Entry Text="{Binding Email}"
+                       Placeholder="pelda@email.hu"
+                       PlaceholderColor="{StaticResource TextHint}"
+                       TextColor="{StaticResource TextPrimary}"
+                       FontFamily="RajdhaniRegular"
+                       FontSize="15"
+                       Keyboard="Email"
+                       ReturnType="Next"
+                       BackgroundColor="Transparent"/>
+            </Border>
+
+            <Label Text="JELSZÓ" Style="{StaticResource SectionTitle}"/>
+            <Border StrokeShape="RoundRectangle 10"
+                    Stroke="{StaticResource BorderGray}"
+                    BackgroundColor="{StaticResource MediumGray}"
+                    Padding="16,0" HeightRequest="52" Margin="0,0,0,4">
+                <Entry Text="{Binding Password}"
+                       Placeholder="••••••••"
+                       PlaceholderColor="{StaticResource TextHint}"
+                       TextColor="{StaticResource TextPrimary}"
+                       FontFamily="RajdhaniRegular"
+                       FontSize="15"
+                       IsPassword="True"
+                       ReturnType="Done"
+                       ReturnCommand="{Binding LoginCommand}"
+                       BackgroundColor="Transparent"/>
+            </Border>
+
+            <Button Text="Elfelejtetted a jelszavad?"
+                    Style="{StaticResource TextButton}"
+                    Command="{Binding GoToForgotPasswordCommand}"
+                    HorizontalOptions="End"
+                    Margin="0,0,0,24"/>
+
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource ErrorRed}"
+                   FontFamily="RajdhaniRegular"
+                   FontSize="14"
+                   IsVisible="{Binding ErrorMessage,
+                               Converter={StaticResource StringToBool}}"
+                   Margin="0,0,0,12"/>
+
+            <Button Text="BEJELENTKEZÉS"
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding LoginCommand}"/>
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource PrimaryYellow}"
+                               Margin="0,8"/>
+
+            <Grid Margin="0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <BoxView Color="{StaticResource BorderGray}"
+                         HeightRequest="1"
+                         Grid.Column="0"
+                         VerticalOptions="Center"/>
+                <Label Text="vagy" Grid.Column="1"
+                       TextColor="{StaticResource TextHint}"
+                       FontFamily="RajdhaniRegular"
+                       FontSize="13"
+                       Margin="12,0"/>
+                <BoxView Color="{StaticResource BorderGray}"
+                         HeightRequest="1"
+                         Grid.Column="2"
+                         VerticalOptions="Center"/>
+            </Grid>
+
+            <Button Text="FIÓK LÉTREHOZÁSA"
+                    Style="{StaticResource SecondaryButton}"
+                    Command="{Binding GoToRegisterCommand}"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

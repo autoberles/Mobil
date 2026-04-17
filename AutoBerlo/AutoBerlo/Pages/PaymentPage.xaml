@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AutoBerlo.ViewModels"
+             x:Class="AutoBerlo.Pages.PaymentPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <ScrollView BackgroundColor="{StaticResource DarkGray}">
+        <VerticalStackLayout Padding="24,48,24,32" Spacing="0">
+
+            <!-- Header -->
+            <Grid Margin="0,0,0,24" ColumnDefinitions="Auto,*">
+                <Button Text="←" Grid.Column="0"
+                        Style="{StaticResource TextButton}"
+                        Command="{Binding GoBackCommand}"
+                        FontSize="22" Padding="0" WidthRequest="36"/>
+                <Label Text="Fizetés" Grid.Column="1"
+                       Style="{StaticResource PageTitle}"
+                       VerticalOptions="Center" Margin="12,0,0,0"/>
+            </Grid>
+
+            <!-- Összefoglaló kártya -->
+            <Border Style="{StaticResource Card}" Padding="16" Margin="0,0,0,24">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="BÉRLÉS ÖSSZEFOGLALÓJA" Style="{StaticResource SectionTitle}" Margin="0"/>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="{Binding Car.DisplayName}"
+                               FontFamily="RajdhaniBold" FontSize="18"
+                               TextColor="{StaticResource TextPrimary}"/>
+                        <Label Grid.Column="1"
+                               Text="{Binding TotalPrice, StringFormat='{0:N0} Ft'}"
+                               FontFamily="RajdhaniBold" FontSize="18"
+                               TextColor="{StaticResource PrimaryYellow}"/>
+                    </Grid>
+                    <Label FontFamily="RajdhaniRegular" FontSize="13"
+                           TextColor="{StaticResource TextSecondary}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding StartDate, StringFormat='{0:yyyy.MM.dd}'}"/>
+                                <Span Text=" → "/>
+                                <Span Text="{Binding EndDate, StringFormat='{0:yyyy.MM.dd}'}"/>
+                                <Span Text="  •  "/>
+                                <Span Text="{Binding TotalDays, StringFormat='{0} nap'}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Bankkártya szekció -->
+            <Label Text="BANKKÁRTYA ADATOK" Style="{StaticResource SectionTitle}"/>
+
+            <!-- Vizuális kártyaszimulációs panel -->
+            <Border BackgroundColor="#1C2A3A"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{StaticResource BorderGray}"
+                    Padding="20,16"
+                    Margin="0,0,0,20"
+                    HeightRequest="100">
+                <Grid ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
+                    <Label Grid.Row="0" Grid.Column="0"
+                           Text="{Binding CardNumber, StringFormat='💳  {0}'}"
+                           FontFamily="RajdhaniSemiBold"
+                           FontSize="18"
+                           TextColor="White"
+                           VerticalOptions="Center"/>
+                    <Label Grid.Row="0" Grid.Column="1"
+                           Text="VISA" FontFamily="RajdhaniBold"
+                           FontSize="22" TextColor="{StaticResource PrimaryYellow}"/>
+                    <Label Grid.Row="1" Grid.Column="0"
+                           Text="{Binding CardHolder}"
+                           FontFamily="RajdhaniRegular" FontSize="13"
+                           TextColor="#AAAAAA"/>
+                    <Label Grid.Row="1" Grid.Column="1"
+                           Text="{Binding ExpiryDate}"
+                           FontFamily="RajdhaniRegular" FontSize="13"
+                           TextColor="#AAAAAA"/>
+                </Grid>
+            </Border>
+
+            <!-- Kártyaszám -->
+            <Label Text="KÁRTYASZÁM" Style="{StaticResource SectionTitle}"/>
+            <Border Style="{StaticResource Card}" StrokeShape="RoundRectangle 10"
+                    Padding="16,0" HeightRequest="52" Margin="0,0,0,12">
+                <Entry Style="{StaticResource InputEntry}"
+                       Text="{Binding CardNumber}"
+                       Placeholder="1234 5678 9012 3456"
+                       Keyboard="Numeric"
+                       MaxLength="19"
+                       BackgroundColor="Transparent" Margin="0"/>
+            </Border>
+
+            <!-- Kártyabirtokos neve -->
+            <Label Text="KÁRTYABIRTOKOS NEVE" Style="{StaticResource SectionTitle}"/>
+            <Border Style="{StaticResource Card}" StrokeShape="RoundRectangle 10"
+                    Padding="16,0" HeightRequest="52" Margin="0,0,0,12">
+                <Entry Style="{StaticResource InputEntry}"
+                       Text="{Binding CardHolder}"
+                       Placeholder="KOVÁCS ANDRAS"
+                       BackgroundColor="Transparent" Margin="0"/>
+            </Border>
+
+            <!-- Lejárat + CVV -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,0,0,24">
+                <VerticalStackLayout Grid.Column="0" Spacing="0">
+                    <Label Text="LEJÁRAT" Style="{StaticResource SectionTitle}" Margin="0,16,0,8"/>
+                    <Border Style="{StaticResource Card}" StrokeShape="RoundRectangle 10"
+                            Padding="16,0" HeightRequest="52">
+                        <Entry Style="{StaticResource InputEntry}"
+                               Text="{Binding ExpiryDate}"
+                               Placeholder="MM/YY"
+                               Keyboard="Numeric"
+                               MaxLength="5"
+                               BackgroundColor="Transparent" Margin="0"/>
+                    </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Spacing="0">
+                    <Label Text="CVV" Style="{StaticResource SectionTitle}" Margin="0,16,0,8"/>
+                    <Border Style="{StaticResource Card}" StrokeShape="RoundRectangle 10"
+                            Padding="16,0" HeightRequest="52">
+                        <Entry Style="{StaticResource InputEntry}"
+                               Text="{Binding Cvv}"
+                               Placeholder="•••"
+                               IsPassword="True"
+                               Keyboard="Numeric"
+                               MaxLength="3"
+                               BackgroundColor="Transparent" Margin="0"/>
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+
+            <!-- Szimuláció figyelmeztetés -->
+            <Border BackgroundColor="#1A2A1A"
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="{StaticResource SuccessGreen}"
+                    Padding="14,10"
+                    Margin="0,0,0,24">
+                <Label FontFamily="RajdhaniRegular" FontSize="13"
+                       TextColor="#88CC88">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="🔒  " FontSize="14"/>
+                            <Span Text="Ez egy szimulált fizetés. Valódi banki tranzakció nem történik."/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Border>
+
+            <!-- Hibaüzenet -->
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource ErrorRed}"
+                   FontFamily="RajdhaniRegular" FontSize="14"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBool}}"
+                   Margin="0,0,0,8"/>
+
+            <!-- Sikeres fizetés overlay -->
+            <VerticalStackLayout IsVisible="{Binding IsSuccess}"
+                                 HorizontalOptions="Center"
+                                 Spacing="8" Margin="0,16">
+                <Label Text="✓" FontSize="48"
+                       TextColor="{StaticResource SuccessGreen}"
+                       HorizontalOptions="Center"/>
+                <Label Text="Bérlés visszaigazolva!"
+                       FontFamily="RajdhaniBold" FontSize="20"
+                       TextColor="{StaticResource SuccessGreen}"
+                       HorizontalOptions="Center"/>
+                <Label Text="Megerősítő email elküldve."
+                       Style="{StaticResource SubTitle}"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <!-- Fizetés gomb -->
+            <Button Text="FIZETÉS ÉS BÉRLÉS MEGERŐSÍTÉSE"
+                    Style="{StaticResource PrimaryButton}"
+                    Command="{Binding PayCommand}"
+                    IsVisible="{Binding IsSuccess, Converter={StaticResource BoolInverter}}"
+                    Margin="0,8,0,0"/>
+
+            <!-- Feldolgozás -->
+            <VerticalStackLayout IsVisible="{Binding IsProcessing}"
+                                 HorizontalOptions="Center" Spacing="8" Margin="0,8">
+                <ActivityIndicator IsRunning="True"
+                                   Color="{StaticResource PrimaryYellow}"
+                                   WidthRequest="32" HeightRequest="32"/>
+                <Label Text="Feldolgozás..."
+                       Style="{StaticResource SubTitle}"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

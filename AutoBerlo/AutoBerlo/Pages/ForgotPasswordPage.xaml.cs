@@ -2,9 +2,9 @@ using AutoBerlo.ViewModels;
 
 namespace AutoBerlo.Pages;
 
-public partial class RegisterPage : ContentPage
+public partial class ForgotPasswordPage : ContentPage
 {
-    public RegisterPage(RegisterViewModel vm)
+    public ForgotPasswordPage(ForgotPasswordViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;

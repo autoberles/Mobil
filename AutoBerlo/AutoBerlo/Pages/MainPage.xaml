@@ -1,40 +1,272 @@
-﻿<ContentPage
-    x:Class="AutoBerlo.Pages.MainPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Bejelentkezés">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AutoBerlo.ViewModels"
+             xmlns:models="clr-namespace:AutoBerlo.Models"
+             x:Class="AutoBerlo.Pages.MainPage"
+             NavigationPage.HasNavigationBar="False">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="20">
+    <Grid RowDefinitions="Auto,Auto,*"
+          BackgroundColor="{StaticResource DarkGray}">
 
-            <Label
-                Text="LOGO"
-                FontSize="32"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"/>
+        <!-- Fejléc -->
+        <Grid Grid.Row="0" Padding="20,52,20,12"
+              ColumnDefinitions="*,Auto"
+              BackgroundColor="{StaticResource MediumGray}">
+            <Image Source="logo.png"
+                   HeightRequest="36"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"/>
+            <Button Grid.Column="1"
+                    Text="Kilépés"
+                    Style="{StaticResource TextButton}"
+                    Command="{Binding LogoutCommand}"
+                    FontSize="13"/>
+        </Grid>
 
-            <Entry
-                Placeholder="Email"
-                Text="{Binding Email}" />
+        <!-- Keresés + Szűrő sáv -->
+        <VerticalStackLayout Grid.Row="1"
+                             BackgroundColor="{StaticResource MediumGray}"
+                             Padding="16,0,16,12"
+                             Spacing="8">
 
-            <Entry
-                Placeholder="Jelszó"
-                IsPassword="True"
-                Text="{Binding Password}" />
+            <Border StrokeShape="RoundRectangle 10"
+                    Stroke="{StaticResource BorderGray}"
+                    BackgroundColor="{StaticResource CardGray}"
+                    Padding="14,0"
+                    HeightRequest="46">
+                <Entry Text="{Binding SearchText}"
+                       Placeholder="Márkára, modellre keresés..."
+                       PlaceholderColor="{StaticResource TextHint}"
+                       TextColor="{StaticResource TextPrimary}"
+                       FontFamily="RajdhaniRegular"
+                       FontSize="14"
+                       BackgroundColor="Transparent"/>
+            </Border>
 
-            <Button
-                Text="Bejelentkezés"
-                Command="{Binding LoginCommand}"
-                BackgroundColor="#1E88E5"
-                TextColor="White"/>
+            <Button Text="⚙  Szűrők"
+                    Command="{Binding ToggleFilterCommand}"
+                    Style="{StaticResource SecondaryButton}"
+                    HeightRequest="40"
+                    FontSize="13"
+                    CornerRadius="8"/>
 
-            <Button
-                Text="Még nincs profilod? Regisztráció"
-                Command="{Binding GoToRegisterCommand}"
-                BackgroundColor="Transparent"
-                TextColor="Gray"/>
+            <!-- Szűrő panel -->
+            <VerticalStackLayout IsVisible="{Binding IsFilterVisible}" Spacing="8">
 
+                <BoxView Color="{StaticResource BorderGray}"
+                         HeightRequest="1"
+                         Margin="0,4"/>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <Border Grid.Column="0"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="{StaticResource BorderGray}"
+                            BackgroundColor="{StaticResource CardGray}"
+                            Padding="8,0">
+                        <Picker Title="Kategória"
+                                ItemsSource="{Binding Categories}"
+                                SelectedItem="{Binding SelectedCategory}"
+                                TextColor="{StaticResource TextPrimary}"
+                                TitleColor="{StaticResource TextHint}"
+                                BackgroundColor="Transparent"
+                                FontFamily="RajdhaniRegular"
+                                FontSize="14"
+                                HeightRequest="46"/>
+                    </Border>
+                    <Border Grid.Column="1"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="{StaticResource BorderGray}"
+                            BackgroundColor="{StaticResource CardGray}"
+                            Padding="8,0">
+                        <Picker Title="Üzemanyag"
+                                ItemsSource="{Binding FuelTypes}"
+                                SelectedItem="{Binding SelectedFuelType}"
+                                TextColor="{StaticResource TextPrimary}"
+                                TitleColor="{StaticResource TextHint}"
+                                BackgroundColor="Transparent"
+                                FontFamily="RajdhaniRegular"
+                                FontSize="14"
+                                HeightRequest="46"/>
+                    </Border>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <Border Grid.Column="0"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="{StaticResource BorderGray}"
+                            BackgroundColor="{StaticResource CardGray}"
+                            Padding="8,0">
+                        <Picker Title="Váltó"
+                                ItemsSource="{Binding TransmissionTypes}"
+                                SelectedItem="{Binding SelectedTransmission}"
+                                TextColor="{StaticResource TextPrimary}"
+                                TitleColor="{StaticResource TextHint}"
+                                BackgroundColor="Transparent"
+                                FontFamily="RajdhaniRegular"
+                                FontSize="14"
+                                HeightRequest="46"/>
+                    </Border>
+                    <Border Grid.Column="1"
+                            StrokeShape="RoundRectangle 8"
+                            Stroke="{StaticResource BorderGray}"
+                            BackgroundColor="{StaticResource CardGray}"
+                            Padding="8,0">
+                        <Picker Title="Telephely"
+                                ItemsSource="{Binding Branches}"
+                                SelectedItem="{Binding SelectedBranch}"
+                                TextColor="{StaticResource TextPrimary}"
+                                TitleColor="{StaticResource TextHint}"
+                                BackgroundColor="Transparent"
+                                FontFamily="RajdhaniRegular"
+                                FontSize="14"
+                                HeightRequest="46"/>
+                    </Border>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,Auto" Padding="4,0">
+                    <Label Grid.Column="0"
+                           Text="Csak elérhető autók"
+                           TextColor="{StaticResource TextPrimary}"
+                           FontFamily="RajdhaniRegular"
+                           FontSize="14"
+                           VerticalOptions="Center"/>
+                    <Switch Grid.Column="1"
+                            IsToggled="{Binding ShowOnlyAvailable}"
+                            OnColor="{StaticResource PrimaryYellow}"
+                            ThumbColor="White"/>
+                </Grid>
+
+                <Button Text="SZŰRŐK TÖRLÉSE"
+                        Style="{StaticResource TextButton}"
+                        Command="{Binding ResetFiltersCommand}"
+                        HorizontalOptions="Start"
+                        FontSize="12"/>
+            </VerticalStackLayout>
         </VerticalStackLayout>
-    </ScrollView>
 
+        <!-- Autók listája -->
+        <Grid Grid.Row="2">
+
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               Color="{StaticResource PrimaryYellow}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
+
+            <VerticalStackLayout
+                IsVisible="{Binding IsEmpty}"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Spacing="8">
+                <Label Text="🚗" FontSize="48" HorizontalOptions="Center"/>
+                <Label Text="Nincs találat"
+                       FontFamily="RajdhaniBold"
+                       FontSize="22"
+                       TextColor="{StaticResource TextPrimary}"
+                       HorizontalOptions="Center"/>
+                <Label Text="Próbálj más szűrőket!"
+                       Style="{StaticResource SubTitle}"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <CollectionView ItemsSource="{Binding Cars}"
+                            IsVisible="{Binding IsLoading,
+                                        Converter={StaticResource BoolInverter}}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="0"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Car">
+                        <Border BackgroundColor="{StaticResource CardGray}"
+                                StrokeShape="RoundRectangle 12"
+                                Stroke="{StaticResource BorderGray}"
+                                StrokeThickness="1"
+                                Margin="16,8,16,0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}},
+                                              Path=SelectCarCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+
+                            <Grid RowDefinitions="180,Auto">
+                                <Image Grid.Row="0"
+                                       Source="{Binding ImgUrl}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="180"/>
+
+                                <Border Grid.Row="0"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Start"
+                                        Margin="0,10,10,0"
+                                        Padding="10,4"
+                                        StrokeShape="RoundRectangle 20"
+                                        BackgroundColor="{Binding Availability,
+                                                          Converter={StaticResource AvailabilityColor}}">
+                                    <Label Text="{Binding AvailabilityText}"
+                                           FontFamily="RajdhaniBold"
+                                           FontSize="11"
+                                           TextColor="White"/>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Row="1"
+                                                     Padding="14,12,14,14"
+                                                     Spacing="4">
+                                    <Label Text="{Binding DisplayName}"
+                                           FontFamily="RajdhaniBold"
+                                           FontSize="18"
+                                           TextColor="{StaticResource TextPrimary}"/>
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding CarCategory.Name}"
+                                               FontFamily="RajdhaniRegular"
+                                               FontSize="13"
+                                               TextColor="{StaticResource TextSecondary}"/>
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Year}"
+                                               FontFamily="RajdhaniRegular"
+                                               FontSize="13"
+                                               TextColor="{StaticResource TextSecondary}"/>
+                                    </Grid>
+
+                                    <BoxView Color="{StaticResource BorderGray}"
+                                             HeightRequest="1"
+                                             Margin="0,4"/>
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding PriceDisplay}"
+                                               FontFamily="RajdhaniBold"
+                                               FontSize="20"
+                                               TextColor="{StaticResource PrimaryYellow}"/>
+                                        <HorizontalStackLayout Grid.Column="1" Spacing="6">
+                                            <Border BackgroundColor="{StaticResource MediumGray}"
+                                                    StrokeShape="RoundRectangle 6"
+                                                    Padding="8,3">
+                                                <Label Text="{Binding FuelType.Name}"
+                                                       FontFamily="RajdhaniRegular"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"/>
+                                            </Border>
+                                            <Border BackgroundColor="{StaticResource MediumGray}"
+                                                    StrokeShape="RoundRectangle 6"
+                                                    Padding="8,3">
+                                                <Label Text="{Binding NumberOfSeats,
+                                                               StringFormat='{0} férőhely'}"
+                                                       FontFamily="RajdhaniRegular"
+                                                       FontSize="11"
+                                                       TextColor="{StaticResource TextSecondary}"/>
+                                            </Border>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
 </ContentPage>

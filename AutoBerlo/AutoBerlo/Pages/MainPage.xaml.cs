@@ -4,9 +4,19 @@ namespace AutoBerlo.Pages;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage()
+    private readonly MainViewModel _vm;
+
+    public MainPage(MainViewModel vm)
     {
         InitializeComponent();
-        BindingContext = new MainViewModel();
+        BindingContext = vm;
+        _vm = vm;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        // Minden oldalmegjelenésnél frissíti az autólistát
+        await _vm.LoadDataCommand.ExecuteAsync(null);
     }
 }
