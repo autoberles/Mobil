@@ -1,6 +1,6 @@
-# 🚗 AutoBerlo — .NET MAUI Mobilalkalmazás
+# 🚗 Autotberelek — .NET MAUI Mobilalkalmazás
 
-Az **AutoBerlo** egy autóbérlő mobilalkalmazás, amely kizárólag bérlők számára készült. Az alkalmazás lehetővé teszi az elérhető autók böngészését, szűrését, részletes adatainak megtekintését és a bérlés elvégzését szimulált fizetéssel.
+Az **Autotberelek** egy autóbérlő mobilalkalmazás, amely kizárólag bérlők számára készült. Az alkalmazás lehetővé teszi az elérhető autók böngészését, szűrését, részletes adatainak megtekintését és a bérlés elvégzését szimulált fizetéssel.
 
 ---
 
@@ -35,7 +35,7 @@ Az **AutoBerlo** egy autóbérlő mobilalkalmazás, amely kizárólag bérlők s
 - Visual Studio 2022+ (MAUI workload telepítve)
 - .NET 10 SDK
 - Android SDK (fizikai eszköz vagy emulátor)
-- A backend futjon lokálisan (`localhost:5128`)
+- A backend fusson lokálisan (`localhost:5128`)
 
 ---
 
@@ -89,7 +89,7 @@ Fizikai Android eszközön teszteléshez **USB kapcsolat** és **adb reverse** s
 cd "C:\Program Files (x86)\Android\android-sdk\platform-tools"
 ```
 
-**4.** Ellenőrizd hogy a telefon látható-e:
+**4.** Ellenőrizd, hogy a telefon látható-e:
 
 ```powershell
 .\adb.exe devices
@@ -111,7 +111,7 @@ Várt kimenet: `5128`
 
 **6.** Ezután már buildelj és telepíts az eszközre — a backend elérhető lesz.
 
-⚠️ **Fontos:** Az `adb reverse` minden USB lecsatlakoztatás, telefon újraindítás vagy PC újraindítás után újra kell futtatni!
+⚠️ **Fontos:** Az `adb reverse`-t minden USB lecsatlakoztatás, telefon újraindítás vagy PC újraindítás után újra kell futtatni!
 
 ### Android emulátor esetén
 
@@ -142,3 +142,15 @@ Telefonszám formátum: `+36 20 123 4567`
 
 - **Backend:** [github.com/autoberles/backend](https://github.com/autoberles/backend)
 - **Frontend:** [github.com/autoberles/frontend](https://github.com/autoberles/frontend)
+
+---
+
+## 👨‍💻 A projekt készítői
+
+| Név              | Szerep                    |
+| ---------------- | ------------------------- |
+| Marquetant Zalán | Frontend fejlesztő        |
+| Márton Kristóf   | Backend fejlesztő         |
+| Szabó Domonkos   | Mobilalkalmazás fejlesztő |
+
+---
