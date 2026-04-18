@@ -4,7 +4,6 @@ using System.Text;
 
 namespace AutoBerlo.Models;
 
-// GET api/users/me válasza
 public class UserProfile
 {
     public int Id { get; set; }

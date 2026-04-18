@@ -25,7 +25,6 @@ public partial class PaymentViewModel : ObservableObject
     [ObservableProperty] private int totalPrice;
     [ObservableProperty] private int totalDays;
 
-    // Szimulált fizetési mezők
     [ObservableProperty] private string cardNumber = string.Empty;
     [ObservableProperty] private string cardHolder = string.Empty;
     [ObservableProperty] private string expiryDate = string.Empty;
@@ -40,7 +39,6 @@ public partial class PaymentViewModel : ObservableObject
     {
         ErrorMessage = string.Empty;
 
-        // Kártya validáció (szimuláció)
         if (string.IsNullOrWhiteSpace(CardNumber) || CardNumber.Replace(" ", "").Length < 16)
         {
             ErrorMessage = "Érvénytelen kártyaszám!";
@@ -64,10 +62,8 @@ public partial class PaymentViewModel : ObservableObject
 
         IsProcessing = true;
 
-        // Szimuláljuk a fizetési feldolgozást
         await Task.Delay(2000);
 
-        // Bérlés létrehozása a backendben
         var (success, message, rental) = await _api.CreateRentalAsync(new CreateRentalRequest
         {
             CarId = Car!.Id,
@@ -80,7 +76,6 @@ public partial class PaymentViewModel : ObservableObject
         if (success)
         {
             IsSuccess = true;
-            // 2 másodperc után vissza a főoldalra
             await Task.Delay(2500);
             await Shell.Current.GoToAsync("//MainPage");
         }

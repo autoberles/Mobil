@@ -16,7 +16,6 @@ public class LoginRequest
 
 public class LoginResponse
 {
-    // ⚠️ Nagy "T" - a backend így adja vissza!
     public string Token { get; set; } = string.Empty;
 }
 
@@ -63,4 +62,13 @@ public class ResetPasswordRequest
 
     [JsonPropertyName("new_password")]
     public string NewPassword { get; set; } = string.Empty;
+}
+
+public class CarFilterOption
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
 }

@@ -15,7 +15,6 @@ public class ApiService
     private static readonly JsonSerializerOptions JsonOpts = new()
     {
         PropertyNameCaseInsensitive = true,
-        // ⬇️ Ez biztosítja hogy PascalCase-ben küldjük a kéréseket
         PropertyNamingPolicy = null
     };
 
@@ -25,7 +24,6 @@ public class ApiService
         _auth = auth;
     }
 
-    // ── Auth ──────────────────────────────────────────────────────
 
     public async Task<(bool Success, string Message)> LoginAsync(LoginRequest req)
     {
@@ -63,10 +61,9 @@ public class ApiService
             var content = new StringContent(
                 json,
                 System.Text.Encoding.UTF8,
-                "application/json"  // ← explicit content type
+                "application/json"
             );
 
-            // Explicit header beállítás
             content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json")
             {
                 CharSet = "utf-8"
@@ -123,17 +120,24 @@ public class ApiService
         }
     }
 
-    // ── Cars ──────────────────────────────────────────────────────
-
     public async Task<List<Car>> GetCarsAsync()
     {
         _auth.SetAuthHeader(_http);
         try
         {
-            var cars = await _http.GetFromJsonAsync<List<Car>>("api/cars", JsonOpts);
+            var response = await _http.GetAsync("api/cars");
+            var body = await response.Content.ReadAsStringAsync();
+
+            System.Diagnostics.Debug.WriteLine($"Cars JSON (első 1500 kar): {body[..Math.Min(1500, body.Length)]}");
+
+            var cars = JsonSerializer.Deserialize<List<Car>>(body, JsonOpts);
             return cars ?? [];
         }
-        catch { return []; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Cars hiba: {ex.Message}");
+            return [];
+        }
     }
 
     public async Task<Car?> GetCarByIdAsync(int id)
@@ -141,12 +145,18 @@ public class ApiService
         _auth.SetAuthHeader(_http);
         try
         {
-            return await _http.GetFromJsonAsync<Car>($"api/cars/{id}", JsonOpts);
+            var response = await _http.GetAsync($"api/cars/{id}");
+            var body = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"CarById JSON: {body[..Math.Min(2000, body.Length)]}");
+            return JsonSerializer.Deserialize<Car>(body, JsonOpts);
         }
-        catch { return null; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"CarById hiba: {ex.Message}");
+            return null;
+        }
     }
 
-    // ── Lookup listák (szűrőhöz) ──────────────────────────────────
 
     public async Task<List<CarCategory>> GetCategoriesAsync()
     {
@@ -184,7 +194,6 @@ public class ApiService
         catch { return []; }
     }
 
-    // ── Rentals ───────────────────────────────────────────────────
 
     public async Task<(bool Success, string Message, Rental? Rental)> CreateRentalAsync(
         CreateRentalRequest req)
@@ -222,7 +231,6 @@ public class ApiService
         catch { return []; }
     }
 
-    // ── User ──────────────────────────────────────────────────────
 
     public async Task<UserProfile?> GetMyProfileAsync()
     {
@@ -234,7 +242,6 @@ public class ApiService
         catch { return null; }
     }
 
-    // ── Helper ────────────────────────────────────────────────────
 
     private static string ParseError(string json)
     {
@@ -245,13 +252,11 @@ public class ApiService
             foreach (var key in new[] { "message", "title", "detail" })
                 if (doc.RootElement.TryGetProperty(key, out var val))
                     return val.GetString() ?? "Ismeretlen hiba.";
-            // Ha sima string a válasz (pl. "Ez az email már foglalt.")
             if (doc.RootElement.ValueKind == JsonValueKind.String)
                 return doc.RootElement.GetString() ?? "Ismeretlen hiba.";
         }
         catch
         {
-            // Nem JSON, sima szöveg
             return json.Trim('"');
         }
         return "Ismeretlen hiba.";

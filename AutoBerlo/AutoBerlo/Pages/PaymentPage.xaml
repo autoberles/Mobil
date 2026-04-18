@@ -9,18 +9,27 @@
     <ScrollView BackgroundColor="{StaticResource DarkGray}">
         <VerticalStackLayout Padding="24,48,24,32" Spacing="0">
 
-            <!-- Header -->
             <Grid Margin="0,0,0,24" ColumnDefinitions="Auto,*">
-                <Button Text="←" Grid.Column="0"
-                        Style="{StaticResource TextButton}"
-                        Command="{Binding GoBackCommand}"
-                        FontSize="22" Padding="0" WidthRequest="36"/>
+                <Border Grid.Column="0"
+                        BackgroundColor="{StaticResource MediumGray}"
+                        StrokeShape="RoundRectangle 24"
+                        StrokeThickness="0"
+                        WidthRequest="48"
+                        HeightRequest="48">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                    </Border.GestureRecognizers>
+                    <Image Source="arrow_back.svg"
+                           WidthRequest="22"
+                           HeightRequest="22"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
                 <Label Text="Fizetés" Grid.Column="1"
                        Style="{StaticResource PageTitle}"
                        VerticalOptions="Center" Margin="12,0,0,0"/>
             </Grid>
 
-            <!-- Összefoglaló kártya -->
             <Border Style="{StaticResource Card}" Padding="16" Margin="0,0,0,24">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="BÉRLÉS ÖSSZEFOGLALÓJA" Style="{StaticResource SectionTitle}" Margin="0"/>
@@ -48,10 +57,8 @@
                 </VerticalStackLayout>
             </Border>
 
-            <!-- Bankkártya szekció -->
             <Label Text="BANKKÁRTYA ADATOK" Style="{StaticResource SectionTitle}"/>
 
-            <!-- Vizuális kártyaszimulációs panel -->
             <Border BackgroundColor="#1C2A3A"
                     StrokeShape="RoundRectangle 16"
                     Stroke="{StaticResource BorderGray}"
@@ -79,7 +86,6 @@
                 </Grid>
             </Border>
 
-            <!-- Kártyaszám -->
             <Label Text="KÁRTYASZÁM" Style="{StaticResource SectionTitle}"/>
             <Border Style="{StaticResource Card}" StrokeShape="RoundRectangle 10"
                     Padding="16,0" HeightRequest="52" Margin="0,0,0,12">
@@ -91,7 +97,6 @@
                        BackgroundColor="Transparent" Margin="0"/>
             </Border>
 
-            <!-- Kártyabirtokos neve -->
             <Label Text="KÁRTYABIRTOKOS NEVE" Style="{StaticResource SectionTitle}"/>
             <Border Style="{StaticResource Card}" StrokeShape="RoundRectangle 10"
                     Padding="16,0" HeightRequest="52" Margin="0,0,0,12">
@@ -101,7 +106,6 @@
                        BackgroundColor="Transparent" Margin="0"/>
             </Border>
 
-            <!-- Lejárat + CVV -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,0,0,24">
                 <VerticalStackLayout Grid.Column="0" Spacing="0">
                     <Label Text="LEJÁRAT" Style="{StaticResource SectionTitle}" Margin="0,16,0,8"/>
@@ -130,7 +134,6 @@
                 </VerticalStackLayout>
             </Grid>
 
-            <!-- Szimuláció figyelmeztetés -->
             <Border BackgroundColor="#1A2A1A"
                     StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource SuccessGreen}"
@@ -147,14 +150,12 @@
                 </Label>
             </Border>
 
-            <!-- Hibaüzenet -->
             <Label Text="{Binding ErrorMessage}"
                    TextColor="{StaticResource ErrorRed}"
                    FontFamily="RajdhaniRegular" FontSize="14"
                    IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToBool}}"
                    Margin="0,0,0,8"/>
 
-            <!-- Sikeres fizetés overlay -->
             <VerticalStackLayout IsVisible="{Binding IsSuccess}"
                                  HorizontalOptions="Center"
                                  Spacing="8" Margin="0,16">
@@ -170,14 +171,12 @@
                        HorizontalOptions="Center"/>
             </VerticalStackLayout>
 
-            <!-- Fizetés gomb -->
             <Button Text="FIZETÉS ÉS BÉRLÉS MEGERŐSÍTÉSE"
                     Style="{StaticResource PrimaryButton}"
                     Command="{Binding PayCommand}"
                     IsVisible="{Binding IsSuccess, Converter={StaticResource BoolInverter}}"
                     Margin="0,8,0,0"/>
 
-            <!-- Feldolgozás -->
             <VerticalStackLayout IsVisible="{Binding IsProcessing}"
                                  HorizontalOptions="Center" Spacing="8" Margin="0,8">
                 <ActivityIndicator IsRunning="True"

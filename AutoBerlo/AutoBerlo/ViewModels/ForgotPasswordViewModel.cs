@@ -14,13 +14,11 @@ public partial class ForgotPasswordViewModel : ObservableObject
         _api = api;
     }
 
-    // ── 1. lépés: email megadása ──────────────────────────────────
     [ObservableProperty] private string email = string.Empty;
     [ObservableProperty] private bool isLoading;
     [ObservableProperty] private string errorMessage = string.Empty;
 
-    // ── 2. lépés: kód + új jelszó ─────────────────────────────────
-    [ObservableProperty] private bool codeStep;   // true = már kódot kérünk
+    [ObservableProperty] private bool codeStep;
     [ObservableProperty] private string code = string.Empty;
     [ObservableProperty] private string newPassword = string.Empty;
     [ObservableProperty] private string confirmNewPassword = string.Empty;
@@ -40,7 +38,7 @@ public partial class ForgotPasswordViewModel : ObservableObject
         IsLoading = false;
 
         if (success)
-            CodeStep = true;   // átváltunk a kód-megadó lépésre
+            CodeStep = true;
         else
             ErrorMessage = message;
     }

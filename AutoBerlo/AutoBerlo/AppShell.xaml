@@ -3,7 +3,8 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:pages="clr-namespace:AutoBerlo.Pages"
        x:Class="AutoBerlo.AppShell"
-       FlyoutBehavior="Disabled">
+       FlyoutBehavior="Disabled"
+       NavBarIsVisible="False">
 
     <ShellContent
         Title="Autók"

@@ -16,7 +16,6 @@ public partial class MainPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        // Minden oldalmegjelenésnél frissíti az autólistát
         await _vm.LoadDataCommand.ExecuteAsync(null);
     }
 }

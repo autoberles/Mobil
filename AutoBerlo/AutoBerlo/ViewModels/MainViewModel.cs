@@ -1,8 +1,8 @@
-﻿using AutoBerlo.Models;
-using AutoBerlo.Pages;
-using AutoBerlo.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using AutoBerlo.Services;
+using AutoBerlo.Models;
+using AutoBerlo.Pages;
 using System.Collections.ObjectModel;
 
 namespace AutoBerlo.ViewModels;
@@ -11,21 +11,24 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly ApiService _api;
     private readonly AuthService _auth;
+    private readonly LookupService _lookup;
+    private readonly IServiceProvider _services;
     private List<Car> _allCars = [];
 
-    public MainViewModel(ApiService api, AuthService auth)
+    public MainViewModel(ApiService api, AuthService auth,
+                         LookupService lookup, IServiceProvider services)
     {
         _api = api;
         _auth = auth;
+        _lookup = lookup;
+        _services = services;
     }
 
-    // ── Autók listája ─────────────────────────────────────────────
-    [ObservableProperty] private ObservableCollection<Car> cars = [];
+    [ObservableProperty] private ObservableCollection<CarDisplayItem> cars = [];
     [ObservableProperty] private bool isLoading;
     [ObservableProperty] private bool isEmpty;
     [ObservableProperty] private string searchText = string.Empty;
 
-    // ── Szűrő opciók ──────────────────────────────────────────────
     [ObservableProperty] private ObservableCollection<string> categories = [];
     [ObservableProperty] private ObservableCollection<string> fuelTypes = [];
     [ObservableProperty] private ObservableCollection<string> transmissionTypes = [];
@@ -38,36 +41,32 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool showOnlyAvailable;
     [ObservableProperty] private bool isFilterVisible;
 
-    // Oldal betöltésekor hívjuk
     [RelayCommand]
     public async Task LoadDataAsync()
     {
         IsLoading = true;
-        var carsTask = _api.GetCarsAsync();
-        var categoriesTask = _api.GetCategoriesAsync();
-        var fuelTask = _api.GetFuelTypesAsync();
-        var transmissionTask = _api.GetTransmissionTypesAsync();
-        var branchTask = _api.GetBranchesAsync();
 
-        await Task.WhenAll(carsTask, categoriesTask, fuelTask, transmissionTask, branchTask);
+        await _lookup.LoadAllAsync();
+        _allCars = await _api.GetCarsAsync();
 
-        _allCars = await carsTask;
-
-        // Szűrő listák feltöltése
         Categories = new ObservableCollection<string>(
-            new[] { "Összes" }.Concat((await categoriesTask).Select(x => x.Name)));
+            new[] { "Összes" }.Concat(_lookup.CarCategories.Select(x => x.Name)));
         FuelTypes = new ObservableCollection<string>(
-            new[] { "Összes" }.Concat((await fuelTask).Select(x => x.Name)));
+            new[] { "Összes" }.Concat(_lookup.FuelTypes.Select(x => x.Name)));
         TransmissionTypes = new ObservableCollection<string>(
-            new[] { "Összes" }.Concat((await transmissionTask).Select(x => x.Name)));
+            new[] { "Összes" }.Concat(_lookup.TransmissionTypes.Select(x => x.Name)));
         Branches = new ObservableCollection<string>(
-            new[] { "Összes" }.Concat((await branchTask).Select(x => x.City)));
+            new[] { "Összes" }.Concat(_lookup.Branches.Select(x => x.City)));
+
+        SelectedCategory = "Összes";
+        SelectedFuelType = "Összes";
+        SelectedTransmission = "Összes";
+        SelectedBranch = "Összes";
 
         IsLoading = false;
         ApplyFilters();
     }
 
-    // Szűrők bármely változásakor meghívódik
     partial void OnSearchTextChanged(string value) => ApplyFilters();
     partial void OnSelectedCategoryChanged(string value) => ApplyFilters();
     partial void OnSelectedFuelTypeChanged(string value) => ApplyFilters();
@@ -85,21 +84,34 @@ public partial class MainViewModel : ObservableObject
                 c.Model.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
 
         if (SelectedCategory != "Összes")
-            filtered = filtered.Where(c => c.CarCategory?.Name == SelectedCategory);
+            filtered = filtered.Where(c =>
+                _lookup.GetCategoryName(c.CarCategoryId) == SelectedCategory);
 
         if (SelectedFuelType != "Összes")
-            filtered = filtered.Where(c => c.FuelType?.Name == SelectedFuelType);
+            filtered = filtered.Where(c =>
+                _lookup.GetFuelTypeName(c.FuelTypeId) == SelectedFuelType);
 
         if (SelectedTransmission != "Összes")
-            filtered = filtered.Where(c => c.TransmissionType?.Name == SelectedTransmission);
+            filtered = filtered.Where(c =>
+                _lookup.GetTransmissionName(c.TransmissionId) == SelectedTransmission);
 
         if (SelectedBranch != "Összes")
-            filtered = filtered.Where(c => c.Branch?.City == SelectedBranch);
+            filtered = filtered.Where(c =>
+                _lookup.GetBranchCity(c.BranchId) == SelectedBranch);
 
         if (ShowOnlyAvailable)
             filtered = filtered.Where(c => c.Availability);
 
-        Cars = new ObservableCollection<Car>(filtered);
+        Cars = new ObservableCollection<CarDisplayItem>(
+            filtered.Select(c => new CarDisplayItem
+            {
+                Car = c,
+                FuelTypeName = _lookup.GetFuelTypeName(c.FuelTypeId),
+                CategoryName = _lookup.GetCategoryName(c.CarCategoryId),
+                TransmissionName = _lookup.GetTransmissionName(c.TransmissionId),
+                BranchCity = _lookup.GetBranchCity(c.BranchId)
+            }));
+
         IsEmpty = Cars.Count == 0;
     }
 
@@ -118,19 +130,17 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task SelectCarAsync(Car car)
+    private async Task SelectCarAsync(CarDisplayItem item)
     {
         await Shell.Current.GoToAsync(nameof(CarDetailPage),
-            new Dictionary<string, object> { ["Car"] = car });
+            new Dictionary<string, object> { ["CarId"] = item.Id });
     }
 
     [RelayCommand]
     private void Logout()
     {
         _auth.Logout();
-
-        // DI konténerből kérjük a LoginPage-et, ne new-val példányosítsuk
-        var loginPage = IPlatformApplication.Current!.Services.GetRequiredService<Pages.LoginPage>();
+        var loginPage = _services.GetRequiredService<Pages.LoginPage>();
         Application.Current!.MainPage = new NavigationPage(loginPage);
     }
 }

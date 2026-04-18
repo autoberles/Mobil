@@ -31,7 +31,6 @@ public partial class RegisterViewModel : ObservableObject
     {
         ErrorMessage = string.Empty;
 
-        // Kliens oldali validáció
         if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName)
             || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password)
             || string.IsNullOrWhiteSpace(PhoneNumber))
@@ -52,7 +51,6 @@ public partial class RegisterViewModel : ObservableObject
             return;
         }
 
-        // Jelszó komplexitás ellenőrzés — backend ezt is validálja
         if (!Password.Any(char.IsUpper) || !Password.Any(char.IsLower) || !Password.Any(char.IsDigit))
         {
             ErrorMessage = "A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot!";
@@ -92,22 +90,17 @@ public partial class RegisterViewModel : ObservableObject
         }
     }
 
-    // Regisztráció előtt formázzuk a telefonszámot ha szükséges
-    // +36305397785 → +36 30 539 7785
     private string FormatPhoneNumber(string phone)
     {
-        // Eltávolítjuk a szóközöket és ellenőrizzük
         var clean = phone.Replace(" ", "").Trim();
 
-        // Ha már jó formátumban van, visszaadjuk
         if (System.Text.RegularExpressions.Regex.IsMatch(phone, @"^\+36\s\d{2}\s\d{3}\s\d{4}$"))
             return phone;
 
-        // +36XXXXXXXXX → +36 XX XXX XXXX
         if (clean.StartsWith("+36") && clean.Length == 12)
             return $"+36 {clean[3..5]} {clean[5..8]} {clean[8..12]}";
 
-        return phone; // Ha nem tudjuk formázni, visszaadjuk eredeti formában
+        return phone;
     }
 
     [RelayCommand]

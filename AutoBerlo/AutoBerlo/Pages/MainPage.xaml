@@ -4,13 +4,13 @@
              xmlns:vm="clr-namespace:AutoBerlo.ViewModels"
              xmlns:models="clr-namespace:AutoBerlo.Models"
              x:Class="AutoBerlo.Pages.MainPage"
+             Shell.NavBarIsVisible="False"
              NavigationPage.HasNavigationBar="False">
 
     <Grid RowDefinitions="Auto,Auto,*"
           BackgroundColor="{StaticResource DarkGray}">
 
-        <!-- Fejléc -->
-        <Grid Grid.Row="0" Padding="20,52,20,12"
+        <Grid Grid.Row="0" Padding="20,32,20,12"
               ColumnDefinitions="*,Auto"
               BackgroundColor="{StaticResource MediumGray}">
             <Image Source="logo.png"
@@ -24,7 +24,6 @@
                     FontSize="13"/>
         </Grid>
 
-        <!-- Keresés + Szűrő sáv -->
         <VerticalStackLayout Grid.Row="1"
                              BackgroundColor="{StaticResource MediumGray}"
                              Padding="16,0,16,12"
@@ -51,7 +50,6 @@
                     FontSize="13"
                     CornerRadius="8"/>
 
-            <!-- Szűrő panel -->
             <VerticalStackLayout IsVisible="{Binding IsFilterVisible}" Spacing="8">
 
                 <BoxView Color="{StaticResource BorderGray}"
@@ -145,7 +143,6 @@
             </VerticalStackLayout>
         </VerticalStackLayout>
 
-        <!-- Autók listája -->
         <Grid Grid.Row="2">
 
             <ActivityIndicator IsRunning="{Binding IsLoading}"
@@ -177,90 +174,94 @@
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="0"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Car">
+                    <DataTemplate x:DataType="models:CarDisplayItem">
                         <Border BackgroundColor="{StaticResource CardGray}"
-                                StrokeShape="RoundRectangle 12"
-                                Stroke="{StaticResource BorderGray}"
-                                StrokeThickness="1"
-                                Margin="16,8,16,0">
+                StrokeShape="RoundRectangle 12"
+                Stroke="{StaticResource BorderGray}"
+                StrokeThickness="1"
+                Margin="16,8,16,0">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}},
-                                              Path=SelectCarCommand}"
-                                    CommandParameter="{Binding .}"/>
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}},
+                              Path=SelectCarCommand}"
+                    CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
 
                             <Grid RowDefinitions="180,Auto">
+
                                 <Image Grid.Row="0"
-                                       Source="{Binding ImgUrl}"
-                                       Aspect="AspectFill"
-                                       HeightRequest="180"/>
+                       Source="{Binding ImgUrl}"
+                       Aspect="AspectFill"
+                       HeightRequest="180"/>
 
                                 <Border Grid.Row="0"
-                                        HorizontalOptions="End"
-                                        VerticalOptions="Start"
-                                        Margin="0,10,10,0"
-                                        Padding="10,4"
-                                        StrokeShape="RoundRectangle 20"
-                                        BackgroundColor="{Binding Availability,
-                                                          Converter={StaticResource AvailabilityColor}}">
+                        HorizontalOptions="End"
+                        VerticalOptions="Start"
+                        Margin="0,10,10,0"
+                        Padding="10,4"
+                        StrokeShape="RoundRectangle 20"
+                        BackgroundColor="{Binding Availability,
+                                          Converter={StaticResource AvailabilityColor}}">
                                     <Label Text="{Binding AvailabilityText}"
-                                           FontFamily="RajdhaniBold"
-                                           FontSize="11"
-                                           TextColor="White"/>
+                           FontFamily="RajdhaniBold"
+                           FontSize="11"
+                           TextColor="White"/>
                                 </Border>
 
                                 <VerticalStackLayout Grid.Row="1"
-                                                     Padding="14,12,14,14"
-                                                     Spacing="4">
+                                     Padding="14,12,14,14"
+                                     Spacing="4">
+
                                     <Label Text="{Binding DisplayName}"
-                                           FontFamily="RajdhaniBold"
-                                           FontSize="18"
-                                           TextColor="{StaticResource TextPrimary}"/>
+                           FontFamily="RajdhaniBold"
+                           FontSize="18"
+                           TextColor="{StaticResource TextPrimary}"/>
 
                                     <Grid ColumnDefinitions="*,Auto">
                                         <Label Grid.Column="0"
-                                               Text="{Binding CarCategory.Name}"
-                                               FontFamily="RajdhaniRegular"
-                                               FontSize="13"
-                                               TextColor="{StaticResource TextSecondary}"/>
+                               Text="{Binding CategoryName}"
+                               FontFamily="RajdhaniRegular"
+                               FontSize="13"
+                               TextColor="{StaticResource TextSecondary}"/>
                                         <Label Grid.Column="1"
-                                               Text="{Binding Year}"
-                                               FontFamily="RajdhaniRegular"
-                                               FontSize="13"
-                                               TextColor="{StaticResource TextSecondary}"/>
+                               Text="{Binding Year}"
+                               FontFamily="RajdhaniRegular"
+                               FontSize="13"
+                               TextColor="{StaticResource TextSecondary}"/>
                                     </Grid>
 
                                     <BoxView Color="{StaticResource BorderGray}"
-                                             HeightRequest="1"
-                                             Margin="0,4"/>
+                             HeightRequest="1"
+                             Margin="0,4"/>
 
                                     <Grid ColumnDefinitions="*,Auto">
                                         <Label Grid.Column="0"
-                                               Text="{Binding PriceDisplay}"
-                                               FontFamily="RajdhaniBold"
-                                               FontSize="20"
-                                               TextColor="{StaticResource PrimaryYellow}"/>
+                               Text="{Binding PriceDisplay}"
+                               FontFamily="RajdhaniBold"
+                               FontSize="20"
+                               TextColor="{StaticResource PrimaryYellow}"/>
+
                                         <HorizontalStackLayout Grid.Column="1" Spacing="6">
                                             <Border BackgroundColor="{StaticResource MediumGray}"
-                                                    StrokeShape="RoundRectangle 6"
-                                                    Padding="8,3">
-                                                <Label Text="{Binding FuelType.Name}"
-                                                       FontFamily="RajdhaniRegular"
-                                                       FontSize="11"
-                                                       TextColor="{StaticResource TextSecondary}"/>
+                                    StrokeShape="RoundRectangle 6"
+                                    Padding="8,3">
+                                                <Label Text="{Binding FuelTypeName}"
+                                       FontFamily="RajdhaniRegular"
+                                       FontSize="11"
+                                       TextColor="{StaticResource TextSecondary}"/>
                                             </Border>
                                             <Border BackgroundColor="{StaticResource MediumGray}"
-                                                    StrokeShape="RoundRectangle 6"
-                                                    Padding="8,3">
+                                    StrokeShape="RoundRectangle 6"
+                                    Padding="8,3">
                                                 <Label Text="{Binding NumberOfSeats,
-                                                               StringFormat='{0} férőhely'}"
-                                                       FontFamily="RajdhaniRegular"
-                                                       FontSize="11"
-                                                       TextColor="{StaticResource TextSecondary}"/>
+                                               StringFormat='{0} férőhely'}"
+                                       FontFamily="RajdhaniRegular"
+                                       FontSize="11"
+                                       TextColor="{StaticResource TextSecondary}"/>
                                             </Border>
                                         </HorizontalStackLayout>
                                     </Grid>
+
                                 </VerticalStackLayout>
                             </Grid>
                         </Border>

@@ -22,17 +22,14 @@ public class AuthService
 
     public bool IsLoggedIn => !string.IsNullOrEmpty(Token) && !IsTokenExpired();
 
-    // Token mentése bejelentkezéskor
     public void SaveToken(string token) => Token = token;
 
-    // Kijelentkezés
     public void Logout()
     {
         Token = null;
         _cachedToken = null;
     }
 
-    // Authorization header beállítása a HttpClient-nek
     public void SetAuthHeader(HttpClient client)
     {
         client.DefaultRequestHeaders.Authorization =

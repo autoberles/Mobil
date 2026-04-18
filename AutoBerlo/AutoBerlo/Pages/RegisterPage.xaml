@@ -7,15 +7,23 @@
     <ScrollView BackgroundColor="{StaticResource DarkGray}">
         <VerticalStackLayout Padding="32,48,32,32" Spacing="0">
 
-            <!-- Header -->
             <Grid Margin="0,0,0,32" ColumnDefinitions="Auto,*">
-                <Button Text="←"
-                        Grid.Column="0"
-                        Style="{StaticResource TextButton}"
-                        Command="{Binding GoBackCommand}"
-                        FontSize="22"
-                        Padding="0"
-                        WidthRequest="36"/>
+                <Border Grid.Column="0"
+                        BackgroundColor="{StaticResource MediumGray}"
+                        StrokeShape="RoundRectangle 24"
+                        StrokeThickness="0"
+                        WidthRequest="48"
+                        HeightRequest="48"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoBackCommand}"/>
+                    </Border.GestureRecognizers>
+                    <Image Source="arrow_back.svg"
+                           WidthRequest="22"
+                           HeightRequest="22"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </Border>
                 <Label Text="Új fiók"
                        Grid.Column="1"
                        Style="{StaticResource PageTitle}"
@@ -23,7 +31,6 @@
                        Margin="12,0,0,0"/>
             </Grid>
 
-            <!-- Vezetéknév -->
             <Label Text="VEZETÉKNÉV" Style="{StaticResource SectionTitle}"/>
             <Border StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource BorderGray}"
@@ -38,7 +45,6 @@
                        BackgroundColor="Transparent"/>
             </Border>
 
-            <!-- Keresztnév -->
             <Label Text="KERESZTNÉV" Style="{StaticResource SectionTitle}"/>
             <Border StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource BorderGray}"
@@ -53,7 +59,6 @@
                        BackgroundColor="Transparent"/>
             </Border>
 
-            <!-- Email -->
             <Label Text="EMAIL CÍM" Style="{StaticResource SectionTitle}"/>
             <Border StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource BorderGray}"
@@ -69,7 +74,6 @@
                        BackgroundColor="Transparent"/>
             </Border>
 
-            <!-- Telefonszám -->
             <Label Text="TELEFONSZÁM" Style="{StaticResource SectionTitle}"/>
             <Border StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource BorderGray}"
@@ -90,7 +94,6 @@
                 TextColor="{StaticResource TextHint}"
                 Margin="0,-8,0,12"/>
 
-            <!-- Születési dátum -->
             <Label Text="SZÜLETÉSI DÁTUM" Style="{StaticResource SectionTitle}"/>
             <Border StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource BorderGray}"
@@ -104,7 +107,6 @@
                             FontSize="15"/>
             </Border>
 
-            <!-- Jelszó -->
             <Label Text="JELSZÓ" Style="{StaticResource SectionTitle}"/>
             <Border StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource BorderGray}"
@@ -125,7 +127,6 @@
                 TextColor="{StaticResource TextHint}"
                 Margin="0,-8,0,12"/>
 
-            <!-- Jelszó megerősítés -->
             <Label Text="JELSZÓ MEGERŐSÍTÉS" Style="{StaticResource SectionTitle}"/>
             <Border StrokeShape="RoundRectangle 10"
                     Stroke="{StaticResource BorderGray}"
@@ -141,7 +142,6 @@
                        BackgroundColor="Transparent"/>
             </Border>
 
-            <!-- Hibaüzenet -->
             <Label Text="{Binding ErrorMessage}"
                    TextColor="{StaticResource ErrorRed}"
                    FontFamily="RajdhaniRegular"
@@ -150,7 +150,6 @@
                                Converter={StaticResource StringToBool}}"
                    Margin="0,0,0,8"/>
 
-            <!-- Sikeres üzenet -->
             <Label Text="{Binding SuccessMessage}"
                    TextColor="{StaticResource SuccessGreen}"
                    FontFamily="RajdhaniRegular"
@@ -159,7 +158,6 @@
                                Converter={StaticResource StringToBool}}"
                    Margin="0,0,0,8"/>
 
-            <!-- Regisztráció gomb -->
             <Button Text="REGISZTRÁCIÓ"
                     Style="{StaticResource PrimaryButton}"
                     Command="{Binding RegisterCommand}"/>
@@ -169,7 +167,6 @@
                                Color="{StaticResource PrimaryYellow}"
                                Margin="0,8"/>
 
-            <!-- Felhasználási feltételek -->
             <Grid ColumnDefinitions="Auto,*"
                     Margin="0,0,0,20"
                     ColumnSpacing="12">

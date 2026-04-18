@@ -15,7 +15,6 @@ public partial class LoginViewModel : ObservableObject
         _api = api;
     }
 
-    // ── Login mezők ───────────────────────────────────────────────
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
@@ -43,7 +42,6 @@ public partial class LoginViewModel : ObservableObject
 
         if (success)
         {
-            // Navigálás a főoldalra, vissza nem lehet jönni
             Application.Current!.MainPage = new AppShell();
         }
         else
@@ -55,8 +53,6 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private async Task GoToRegisterAsync()
     {
-        // Shell.Current null mert LoginPage NavigationPage-en belül van
-        // NavigationPage-en belüli navigációhoz Application.Current.MainPage kell
         if (Application.Current?.MainPage is NavigationPage navPage)
             await navPage.PushAsync(
                 IPlatformApplication.Current!.Services.GetRequiredService<Pages.RegisterPage>());

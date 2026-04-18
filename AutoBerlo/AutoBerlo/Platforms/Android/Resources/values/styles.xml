@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="MainTheme" parent="MainTheme.Base">
+	</style>
+	<style name="MainTheme.Base" parent="Theme.AppCompat.DayNight">
+		<item name="colorPrimary">#1A1A1A</item>
+		<item name="colorPrimaryDark">#1A1A1A</item>
+		<item name="colorAccent">#FFFF29</item>
+		<item name="android:windowBackground">#1A1A1A</item>
+		<item name="android:statusBarColor">#1A1A1A</item>
+	</style>
+</resources>

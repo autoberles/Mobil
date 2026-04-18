@@ -13,6 +13,9 @@ obj/
 *.apk
 *.apks
 *.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
 
 # Rider
 .idea/
@@ -38,6 +41,8 @@ Thumbs.db
 # NuGet
 *.nupkg
 packages/
+*.nuget.props
+*.nuget.targets
 
 # Test results
 TestResults/
@@ -50,3 +55,19 @@ Platforms/Android/bin/
 Platforms/Android/obj/
 Platforms/iOS/bin/
 Platforms/iOS/obj/
+
+# Android specifikus
+local.properties
+*.keystore
+*.jks
+
+# iOS specifikus
+*.mobileprovision
+*.p12
+*.p8
+xcuserdata/
+
+# Publish
+publish/
+*.msix
+*.msixbundle
