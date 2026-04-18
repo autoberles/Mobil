@@ -44,7 +44,7 @@ Az **Autotberelek** egy autóbérlő mobilalkalmazás, amely kizárólag bérlő
 ### 1. Projekt klónozása
 
 ```bash
-git clone https://github.com/autoberles/AutoBerlo.git
+git clone https://github.com/autoberles/Mobil
 cd AutoBerlo
 ```
 
